@@ -1,0 +1,34 @@
+---
+- name: Install OpenJDK from AdoptOpenJDK
+  hosts: Test
+  become: yes
+
+  tasks:
+    - name: Create directory if not exists
+      file:
+        path: /appl/jira
+        state: directory
+      when: not ansible_check_mode
+
+    - name: Download Adopt OpenJDK
+      get_url:
+        url: "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.11%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz"
+        dest: /tmp/openjdk.tar.gz
+
+    - name: Extract OpenJDK
+      unarchive:
+        src: /tmp/openjdk.tar.gz
+        dest: /appl/jira
+        remote_src: yes
+      notify:
+        - Set JAVA_HOME
+
+  handlers:
+    - name: Set JAVA_HOME
+      ansible.builtin.shell: |
+        echo 'export JAVA_HOME=/appl/jira/{{ openjdk_folder_name }}' >> /etc/profile
+        echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile
+      when: not ansible_check_mode
+
+
+//ansible-playbook -i your_inventory_file install_openjdk.yml

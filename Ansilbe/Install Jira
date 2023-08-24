@@ -1,0 +1,27 @@
+---
+- name: Install Jira
+  hosts: your_target_host
+  become: yes
+
+  vars:
+    jira_version: "9.4.9"
+    jira_install_dir: "/appl/jira"
+
+  tasks:
+    - name: Create directory if not exists
+      file:
+        path: "{{ jira_install_dir }}"
+        state: directory
+      when: not ansible_check_mode
+
+    - name: Download Jira
+      get_url:
+        url: "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-{{ jira_version }}.tar.gz"
+        dest: "/tmp/atlassian-jira.tar.gz"
+
+    - name: Extract Jira
+      unarchive:
+        src: "/tmp/atlassian-jira.tar.gz"
+        dest: "{{ jira_install_dir }}"
+        remote_src: yes
+      when: not ansible_check_mode

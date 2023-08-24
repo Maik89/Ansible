@@ -1,0 +1,23 @@
+---
+- name: Create Symlinks for Jira and JDK
+  hosts: Test
+  become: yes
+
+  vars:
+    jira_home: /appl/jira/inst
+    jdk_home: /appl/jira/java
+
+  tasks:
+    - name: Create symlink for Jira
+      file:
+        src: "{{ jira_home }}"
+        dest: /appl/jira/inst
+        state: link
+      when: not ansible_check_mode
+
+    - name: Create symlink for JDK
+      file:
+        src: "{{ jdk_home }}"
+        dest: /appl/jira/java
+        state: link
+      when: not ansible_check_mode

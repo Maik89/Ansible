@@ -1,0 +1,9 @@
+
+<DataSource>
+    <PoolPreparedStatements>true</PoolPreparedStatements>
+    <Username>{DB_USER}</Username>
+    <Password>{DB_PASSWORD}</Password>
+    <DriverClassName>com.mysql.jdbc.Driver</DriverClassName>
+    <Url>jdbc:mysql://{HOST}/{DB_NAME}?useUnicode=true&amp;characterEncoding=UTF8</Url>
+    
+</DataSource>
